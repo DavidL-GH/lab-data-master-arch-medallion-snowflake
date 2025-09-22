@@ -73,20 +73,21 @@ INSERT INTO ecommerce_lab.bronze.pedidos_raw VALUES
 ```sql
 CREATE SCHEMA IF NOT EXISTS ecommerce_lab.silver;
 
-CREATE OR REPLACE TABLE ecommerce_lab.silver.pedidos_limpios AS
+CREATE OR REPLACE TABLE pedidos_limpios AS
 SELECT
   TO_NUMBER(ID) AS PedidoID,
   TRY_TO_DATE(FECHA_PEDIDO, 'YYYY-MM-DD') AS FechaPedido,
-  TO_NUMBER(CLIENTE_ID) AS ClienteID,
+  TO_NUMBER (CLIENTE_ID) AS ClienteID,
   TO_NUMBER(PRODUCTO_ID) AS ProductoID,
   TO_NUMBER(CANTIDAD) AS Cantidad
-FROM ecommerce_lab.bronze.pedidos_raw
+FROM pedidos_raw
 WHERE
-  IS_NUMBER(ID)
+  TRY_TO_NUMBER(ID)
   AND TRY_TO_DATE(FECHA_PEDIDO, 'YYYY-MM-DD') IS NOT NULL
-  AND IS_NUMBER(CLIENTE_ID)
-  AND IS_NUMBER(PRODUCTO_ID)
-  AND IS_NUMBER(CANTIDAD);
+  AND TRY_TO_NUMBER(CLIENTE_ID)
+  AND TRY_TO_NUMBER(PRODUCTO_ID)
+  AND TRY_TO_NUMBER(CANTIDAD);
+
 ```
 
 ### 2. Validar registros limpios
